@@ -94,7 +94,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             align="end"
             className="w-48 font-[family-name:var(--font-catamaran)]"
           >
-            <DropdownMenuItem>👋 John Doe</DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer font-bold">
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
@@ -114,21 +113,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             }`}
         >
           {isSidebarOpen ? (
-            <Link href="/pdfsummarize" passHref legacyBehavior>
-              <Button
-                variant="ghost"
-                className={`flex items-center cursor-pointer flex-grow font-bold p-5 border-2 bg-white`}
-              >
-                <Plus className="h-4 w-4 mr-2" /> Generate New
+            <Link
+              href="/pdfsummarize"
+              className={`flex items-center cursor-pointer flex-grow font-bold border-2 h-[44px] hover:bg-blue-50 rounded-lg bg-white`}
+            >
+              <Button variant="ghost" className="w-full justify-start cursor-pointer font-bold">
+                <Plus className="w-4 mr-2" /> Generate New
               </Button>
             </Link>
           ) : (
-            <Link href="/pdfsummarize" passHref legacyBehavior>
-              <Button
-                variant="ghost"
-                className={`flex items-center cursor-pointer w-10 h-10 border-2 bg-white`}
-              >
-                <Plus className="h-4 w-4" />
+            <Link
+              href="/pdfsummarize"
+              className={`flex items-center cursor-pointer w-10 h-10 border-2 rounded-md bg-white hover:bg-blue-50`}
+            >
+              <Button variant="ghost" className="w-full justify-center cursor-pointer">
+                <Plus className="h-4 w-4" fontWeight={400} />
               </Button>
             </Link>
           )}
