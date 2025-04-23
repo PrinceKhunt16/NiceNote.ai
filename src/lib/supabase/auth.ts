@@ -1,5 +1,4 @@
 import { supabase } from "./client";
-import { URLSearchParams } from "url";
 
 export async function signUpAuth(
   name: string,
