@@ -33,9 +33,13 @@ export async function middleware(request: NextRequest) {
             },
         }
     );
-
+    
     const { data: { session } } = await supabase.auth.getSession();
     const path = request.nextUrl.pathname;
+    
+    if (path.startsWith('/auth/callback')) {
+        return response
+    }
     
     if (path === "/") {
         return response;

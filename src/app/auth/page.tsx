@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { signInAuth, signUpAuth } from "@/lib/supabase/auth";
+import { supabase } from "@/lib/supabase/client";
 
 export default function Auth() {
     const [signIn, setSignIn] = useState({
@@ -21,6 +22,8 @@ export default function Auth() {
     })
     const [error, setError] = useState('')
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const redirectTo = searchParams.get('redirectTo') || '/dashboard'
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -36,6 +39,23 @@ export default function Auth() {
             setError(error.message)
         } else {
             router.push('/dashboard')
+        }
+    }
+
+    const handleSignInGoogle = async () => {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}`,
+                queryParams: {
+                    access_type: 'offline',
+                    prompt: 'consent',
+                },
+            },
+        })
+
+        if (error) {
+            console.error('Google OAuth error:', error)
         }
     }
 
@@ -65,7 +85,7 @@ export default function Auth() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid gap-4">
-                        <Button variant="outline" className="w-full font-bold cursor-pointer">
+                        <Button variant="outline" className="w-full font-bold cursor-pointer" onClick={handleSignInGoogle}>
                             <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                                 <path
                                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

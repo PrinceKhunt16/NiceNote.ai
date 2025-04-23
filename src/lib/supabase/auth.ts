@@ -1,6 +1,11 @@
 import { supabase } from "./client";
+import { URLSearchParams } from "url";
 
-export async function signUpAuth(name: string, email: string, password: string) {
+export async function signUpAuth(
+  name: string,
+  email: string,
+  password: string
+) {
   const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
