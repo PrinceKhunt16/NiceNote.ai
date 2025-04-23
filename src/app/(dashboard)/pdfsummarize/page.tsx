@@ -24,51 +24,74 @@ import {
   Search,
   EllipsisVertical,
 } from "lucide-react";
-import { mockPDFSummaries, PDFSummary } from "@/data/mockData";
+import { Note } from "@/types/notes.types";
 import MarkdownRenderer from "@/components/MarkdownRender";
 import { Label } from "@/components/ui/label";
+import pdfToText from 'react-pdftotext';
+import { useCreateSummary } from '@/hooks/useCreateSummary';
+import { useEditSummary } from "@/hooks/useEditNote";
+import { useUserNotes } from "@/hooks/useUserNotes";
+import { useDeleteSummary } from "@/hooks/useDeleteNote";
 
 export default function PDFSummarize() {
-  const [selectedSummary, setSelectedSummary] = useState<PDFSummary | null>(null);
+  const [selectedSummary, setSelectedSummary] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [title, setTitle] = useState("");
+  const [tags, setTags] = useState("");
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [fileText, setFileText] = useState("");
   const [editOpen, setEditOpen] = useState(false);
-  const [editName, setEditName] = useState("");
+  const [editTitle, setEditTitle] = useState("");
   const [editFileName, setEditFileName] = useState("");
   const [editTags, setEditTags] = useState("");
+  const { mutate, isPending: isPendingCreateSummary } = useCreateSummary();
+  const { data: notes, isLoading, isError } = useUserNotes();
+  const { mutate: editSummary, isPending: isPendingEditSummary } = useEditSummary();
+  const { mutate: deleteSummary, isPending: isPendingDeleteSummary } = useDeleteSummary();
 
-  useEffect(() => {
-    if (selectedSummary) {
-      setEditName(selectedSummary.title);
-      setEditFileName(selectedSummary.fileName);
-      setEditTags(selectedSummary.tags.join(", "));
-    }
-  }, [selectedSummary]);
+  const extractText = () => {
+    if (!file) return;
+
+    pdfToText(file)
+      .then(text => setFileText(text))
+      .catch(error => console.error("Failed to extract text from PDF", error));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (file) {
-      alert(`Uploaded: ${file.name}`);
-      setOpen(false);
-    }
-  };
+    extractText();
 
-  const filteredSummaries = mockPDFSummaries.filter(summary =>
-    summary.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    summary.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+    if (!fileText || !title || !tags) return;
+
+    mutate({ title, fileText, tags, fileName: file?.name || "filename.pdf" });
+  };
 
   const handleEditSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedSummary) return;
 
-    alert(
-      `Updated Summary:\nName: ${editName}\nFile Name: ${editFileName}\nTags: ${editTags}`
-    );
+    editSummary({
+      id: Number(selectedSummary.id),
+      title: editTitle,
+      file_name: editFileName,
+      tags: editTitle,
+    });
 
     setEditOpen(false);
   };
+
+  const handleDelete = (id: number) => {
+    deleteSummary(id);
+  };
+
+  useEffect(() => {
+    if (selectedSummary) {
+      setEditTitle(selectedSummary.title);
+      setEditFileName(selectedSummary.file_name);
+      setEditTags(selectedSummary.tags);
+    }
+  }, [selectedSummary]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -87,10 +110,29 @@ export default function PDFSummarize() {
               <DialogDescription className="text-xl">Upload a PDF file to generate a summary.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter summary title"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tags">Tags (comma separated)</Label>
+                <Input
+                  id="tags"
+                  value={tags}
+                  onChange={(e) => setTags(e.target.value)}
+                  placeholder="tag1,tag2,tag3"
+                />
+              </div>
               <div className="col-span-4 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-blue-500 transition-colors relative">
                 <label htmlFor="file" className="flex flex-col items-center cursor-pointer">
                   <p className="text-3xl">📁</p>
-                  <span className="text-gray-600">Upload the PDF file</span>
+                  <span className="text-gray-600">{file ? `${file.name}` : "Upload PDF file"}</span>
                 </label>
                 <input
                   type="file"
@@ -122,34 +164,34 @@ export default function PDFSummarize() {
           </div>
 
           <div className="space-y-4 mt-4">
-            {filteredSummaries.map((summary) => (
+            {notes?.map((note) => (
               <Card
-                key={summary.id}
-                className={`cursor-pointer transition-all ${selectedSummary?.id === summary.id ? ' ring-2 ring-blue-400' : ''
+                key={note.id}
+                className={`cursor-pointer transition-all ${selectedSummary?.id === note.id ? ' ring-2 ring-blue-400' : ''
                   }`}
-                onClick={() => setSelectedSummary(summary)}
+                onClick={() => setSelectedSummary(note)}
               >
                 <CardContent>
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold">{summary.title}</h3>
-                      <p className="text-sm text-gray-500">{summary.fileName}</p>
+                      <h3 className="font-semibold">{note.title}</h3>
+                      <p className="text-sm text-gray-500">{note.file_name}</p>
                     </div>
                   </div>
                   <div className="mt-2 flex items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center" suppressHydrationWarning>
                       <Clock className="mr-1 h-4 w-4" />
-                      {new Date(summary.createdAt).toLocaleDateString()}
+                      {new Date(note.created_at).toLocaleDateString()}
                     </div>
                   </div>
                   <div className="mt-4">
                     <div className="flex flex-wrap gap-2">
-                      {summary.tags.map((tag) => (
+                      {note.tags.split(",").map((t: string) => (
                         <span
-                          key={tag}
-                          className="px-2 py-1 bg-gray-100 text-sm"
+                          key={t}
+                          className="px-2 py-1 bg-gray-100 text-sm font-bold"
                         >
-                          {tag}
+                          {t}
                         </span>
                       ))}
                     </div>
@@ -168,7 +210,7 @@ export default function PDFSummarize() {
                   <div className="absolute right-0 top-0 order-1 z-10">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" aria-label="Options" className="border-2 w-10 h-10 bg-gray cursor-pointer rounded-full">
+                        <Button variant="ghost" size="sm" aria-label="Options" className="border-2 w-10 h-10 bg-gray cursor-pointer rounded-full bg-white">
                           <EllipsisVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -183,7 +225,7 @@ export default function PDFSummarize() {
                           <DropdownMenuItem
                             className="text-destructive cursor-pointer"
                             onClick={() => {
-                              alert("Delete clicked");
+                              handleDelete(Number(selectedSummary.id))
                             }}
                           >
                             Delete
@@ -201,12 +243,14 @@ export default function PDFSummarize() {
             </Card>
           ) : (
             <Card className="flex items-center justify-center">
-              <div className="text-center p-8">
-                <p className="text-4xl">😕</p>
-                <h3 className="text-lg font-semibold mb-2">No Summary Selected</h3>
-                <p className="text-gray-500">
-                  Select a summary from the list or create a new one
-                </p>
+              <div className="flex items-center justify-center text-center p-8 min-h-[calc(100vh-270px)]">
+                <div>
+                  <p className="text-4xl">😕</p>
+                  <h3 className="text-lg font-semibold mb-2">No Summary Selected</h3>
+                  <p className="text-gray-500">
+                    Select a summary from the list or create a new one
+                  </p>
+                </div>
               </div>
             </Card>
           )}
@@ -226,8 +270,8 @@ export default function PDFSummarize() {
               </Label>
               <Input
                 id="name"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
                 className="col-span-3"
                 required
               />
@@ -260,7 +304,7 @@ export default function PDFSummarize() {
             </div>
 
             <DialogFooter>
-              <Button type="submit" className="font-bold">Save</Button>
+              <Button type="submit" className="font-bold cursor-pointer">Save</Button>
             </DialogFooter>
           </form>
         </DialogContent>

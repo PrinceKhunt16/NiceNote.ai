@@ -11,12 +11,12 @@ export default function AuthCallbackPage() {
 
     useEffect(() => {
         supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_IN') {
-                const redirectTo = searchParams.get('redirectTo') || '/dashboard'
-                router.push(redirectTo)
-            }
+          if (event === 'SIGNED_IN') {
+            const redirectTo = searchParams.get('redirectTo') || '/dashboard'
+            router.push(redirectTo)
+          }
         })
-    }, [router, searchParams])
+      }, [router, searchParams])
 
     return (
         <div className="flex items-center justify-center min-h-screen font-[family-name:var(--font-catamaran)]">

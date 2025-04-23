@@ -1,0 +1,53 @@
+import { NextRequest, NextResponse } from "next/server";
+
+const generateSummaryWithGroq = async (pdfText: string): Promise<string> => {
+  const GROQ_API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY;
+
+  if (!GROQ_API_KEY) throw new Error("Groq API key not configured");
+
+  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${GROQ_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "llama3-8b-8192",
+      messages: [
+        {
+          role: "system",
+          content: "You are a helpful assistant that summarizes documents in Markdown format. Your summaries should include a clear title, bullet points highlighting key insights, and use bold text to emphasize important points. Keep the summary concise and well-structured, with a maximum length of 300 words. Return only the Markdown content without any additional explanation.",
+        },
+        {
+          role: "user",
+          content: `Summarize the following content in Markdown format with a clear title, don't add summary or note word in title, bullet points, and bold key points (max 300 words):\n\n${pdfText.substring(0, 10000)}`
+        }
+      ],
+      temperature: 0.5
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error?.message || "Groq API request failed");
+  }
+
+  const data = await response.json();
+  return data.choices[0]?.message?.content || "No summary generated";
+};
+
+export async function POST(req: NextRequest) {
+  try {
+    const { text } = await req.json();
+
+    if (!text || typeof text !== "string") {
+      return NextResponse.json({ error: "Invalid request. 'text' is required." }, { status: 400 });
+    }
+
+    const summary = await generateSummaryWithGroq(text);
+    return NextResponse.json({ summary });
+  } catch (error: any) {
+    console.error("Summarization error:", error);
+    return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
+  }
+}
