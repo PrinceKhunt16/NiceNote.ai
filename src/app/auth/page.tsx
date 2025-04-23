@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signInAuth, signUpAuth } from "@/lib/supabase/auth";
 import { supabase } from "@/lib/supabase/client";
+import { toasterMessage } from "@/lib/toaster";
 
 export default function Auth() {
     const [signIn, setSignIn] = useState({
@@ -38,6 +39,7 @@ export default function Auth() {
         if (error) {
             setError(error.message)
         } else {
+            toasterMessage("Welcome to NiceNote.ai", "🔥");
             router.push('/dashboard')
         }
     }
@@ -57,6 +59,8 @@ export default function Auth() {
         if (error) {
             console.error('Google OAuth error:', error)
         }
+
+        toasterMessage("Welcome to NiceNote.ai", "🔥");
     }
 
     const handleSignUp = async (e: React.FormEvent) => {

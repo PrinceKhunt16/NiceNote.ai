@@ -32,23 +32,24 @@ import { useCreateSummary } from '@/hooks/useCreateSummary';
 import { useEditSummary } from "@/hooks/useEditNote";
 import { useUserNotes } from "@/hooks/useUserNotes";
 import { useDeleteSummary } from "@/hooks/useDeleteNote";
+import { toasterMessage } from "@/lib/toaster";
 
 export default function PDFSummarize() {
   const [selectedSummary, setSelectedSummary] = useState<Note | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
-  const [open, setOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [fileText, setFileText] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editFileName, setEditFileName] = useState("");
   const [editTags, setEditTags] = useState("");
-  const { mutate, isPending: isPendingCreateSummary } = useCreateSummary();
   const { data: notes, isLoading, isError } = useUserNotes();
-  const { mutate: editSummary, isPending: isPendingEditSummary } = useEditSummary();
-  const { mutate: deleteSummary, isPending: isPendingDeleteSummary } = useDeleteSummary();
+  const { mutate, isPending: isPendingCreateSummary, isSuccess: isSuccessCreateSummary } = useCreateSummary();
+  const { mutate: editSummary, isPending: isPendingEditSummary, isSuccess: isSuccessEditSummary } = useEditSummary();
+  const { mutate: deleteSummary, isPending: isPendingDeleteSummary, isSuccess: isSuccessDeleteSummary } = useDeleteSummary();
 
   const extractText = () => {
     if (!file) return;
@@ -65,6 +66,11 @@ export default function PDFSummarize() {
     if (!fileText || !title || !tags) return;
 
     mutate({ title, fileText, tags, fileName: file?.name || "filename.pdf" });
+
+    if (isSuccessCreateSummary) {
+      setCreateOpen(!createOpen);
+      toasterMessage(`${title}, note created.`, "🎊");
+    }
   };
 
   const handleEditSave = (e: React.FormEvent) => {
@@ -75,14 +81,23 @@ export default function PDFSummarize() {
       id: Number(selectedSummary.id),
       title: editTitle,
       file_name: editFileName,
-      tags: editTitle,
+      tags: editTags,
     });
 
     setEditOpen(false);
+
+    if (isSuccessEditSummary) {
+      setEditOpen(!editOpen);
+      toasterMessage(`${editTitle}, note edited.`, "🎊");
+    }
   };
 
   const handleDelete = (id: number) => {
     deleteSummary(id);
+
+    if (isSuccessDeleteSummary) {
+      toasterMessage("Notes deleted", "🎊");
+    }
   };
 
   useEffect(() => {
@@ -97,7 +112,7 @@ export default function PDFSummarize() {
     <div className="container mx-auto px-4 py-8">
       <div className="sticky top-0 z-30 flex justify-between items-center mb-8 px-4 py-4">
         <h1 className="text-3xl font-bold">PDF Summaries</h1>
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
             <Button variant="outline" className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white hover:text-white p-5">
               <span>+</span>
@@ -243,7 +258,7 @@ export default function PDFSummarize() {
             </Card>
           ) : (
             <Card className="flex items-center justify-center">
-              <div className="flex items-center justify-center text-center p-8 min-h-[calc(100vh-270px)]">
+              <div className="flex items-center justify-center text-center p-8 min-h-[calc(100vh-300px)]">
                 <div>
                   <p className="text-4xl">😕</p>
                   <h3 className="text-lg font-semibold mb-2">No Summary Selected</h3>

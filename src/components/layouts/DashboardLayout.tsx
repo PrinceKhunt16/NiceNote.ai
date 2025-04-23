@@ -19,6 +19,7 @@ import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { signOut } from "@/lib/supabase/auth";
 import { useRouter } from "next/navigation";
+import { toasterMessage } from "@/lib/toaster";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -63,6 +64,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   const handleLogOut = async () => {
     const data = await signOut()
+    toasterMessage("Logged Out", "👋");
     router.push('/')
   }
 

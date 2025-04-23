@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase/client";
 
 export const useUserNotes = () => {
   return useQuery({
-    queryKey: ["Notes"],
+    queryKey: ["notes"],
     queryFn: async () => {
       const {
         data: { user },
