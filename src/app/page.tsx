@@ -24,15 +24,15 @@ export default function Home() {
           </p>
 
           <div className="flex gap-4">
-            <Link href="/board" passHref>
+            <Link href="/dashboard" passHref>
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 cursor-pointer">
                 Get Started Free
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/board" passHref>
+            <Link href="/auth" passHref>
               <Button size="lg" variant="outline" className=" cursor-pointer">
-                Learn More
+                Create Account
               </Button>
             </Link>
           </div>

@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
+import { signOut } from "@/lib/supabase/auth";
+import { useRouter } from "next/navigation";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -57,6 +59,12 @@ const useCases = [
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const sidebarWidth = isSidebarOpen ? "w-64" : "w-18";
+  const router = useRouter();
+
+  const handleLogOut = async () => {
+    const data = await signOut()
+    router.push('/')
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,7 +84,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen bg-gray-50 font-[family-name:var(--font-catamaran)]">
       <nav className="bg-white border-b px-4 py-3 flex items-center justify-between fixed w-full top-0 z-50">
         <div className="flex items-center space-x-4">
-          <Link href="/board" passHref>
+          <Link href="/dashboard" passHref>
             <span className="text-3xl font-bold text-blue-600">
               NiceNote.ai
             </span>
@@ -94,7 +102,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             align="end"
             className="w-48 font-[family-name:var(--font-catamaran)]"
           >
-            <DropdownMenuItem className="cursor-pointer font-bold">
+            <DropdownMenuItem className="cursor-pointer font-bold" onClick={() => handleLogOut()}>
               <LogOut className="mr-2 h-4 w-4" />
               Sign Out
             </DropdownMenuItem>

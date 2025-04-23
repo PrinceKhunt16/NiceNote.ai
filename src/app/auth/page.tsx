@@ -1,15 +1,64 @@
+'use client'
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
+import { useRouter } from 'next/navigation'
+import { signInAuth, signUpAuth } from "@/lib/supabase/auth";
 
 export default function Auth() {
+    const [signIn, setSignIn] = useState({
+        email: "princekhunt04@gmail.com",
+        password: "prince10"
+    })
+    const [signUp, setSignUp] = useState({
+        name: "Prince Khunt",
+        email: "princekhunt04@gmail.com",
+        password: "prince10"
+    })
+    const [error, setError] = useState('')
+    const router = useRouter()
+
+    const handleSignIn = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        const { data, error } = await signInAuth(signIn.email, signIn.password);
+
+        if (error?.code === 'unverified_email') {
+            router.push(`/verify-info?email=${encodeURIComponent(signIn.email)}`);
+            return;
+        }
+
+        if (error) {
+            setError(error.message)
+        } else {
+            router.push('/dashboard')
+        }
+    }
+
+    const handleSignUp = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const { data, error } = await signUpAuth(signUp.name, signUp.email, signUp.password);
+
+        if (error) {
+            setError(error.message);
+            return;
+        }
+
+        if (data.user) {
+            router.push(`/verify-info?email=${encodeURIComponent(signUp.email)}`);
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-white to-gray-50 flex items-center justify-center p-4 font-[family-name:var(--font-catamaran)]">
             <Card className="w-full max-w-md">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-3xl font-bold text-center">Welcome back</CardTitle>
+                    <CardTitle className="text-3xl font-bold text-center">NiceNote.ai</CardTitle>
                     <CardDescription className="text-xl text-center">
                         Choose your preferred sign in method
                     </CardDescription>
@@ -61,6 +110,13 @@ export default function Auth() {
                                         id="email"
                                         type="email"
                                         placeholder="Enter your email"
+                                        value={signIn.email}
+                                        onChange={(e) =>
+                                            setSignIn(prev => ({
+                                                ...prev,
+                                                email: e.target.value
+                                            }))
+                                        }
                                     />
                                 </div>
                             </div>
@@ -71,15 +127,32 @@ export default function Auth() {
                                         id="password"
                                         type="password"
                                         placeholder="Enter your password"
+                                        value={signIn.password}
+                                        onChange={(e) =>
+                                            setSignIn(prev => ({
+                                                ...prev,
+                                                password: e.target.value
+                                            }))
+                                        }
                                     />
                                 </div>
                             </div>
-                            <Button className="w-full font-bold">Sign In</Button>
+                            <Button onClick={(e) => handleSignIn(e)} className="w-full font-bold cursor-pointer">Sign In</Button>
                         </TabsContent>
                         <TabsContent value="signup" className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Name</Label>
-                                <Input id="name" placeholder="Enter your full name" />
+                                <Input
+                                    value={signUp.name}
+                                    onChange={(e) =>
+                                        setSignUp(prev => ({
+                                            ...prev,
+                                            name: e.target.value
+                                        }))
+                                    }
+                                    id="name"
+                                    placeholder="Enter your full name"
+                                />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
@@ -88,6 +161,13 @@ export default function Auth() {
                                         id="email"
                                         type="email"
                                         placeholder="Enter your email"
+                                        value={signUp.email}
+                                        onChange={(e) =>
+                                            setSignUp(prev => ({
+                                                ...prev,
+                                                email: e.target.value
+                                            }))
+                                        }
                                     />
                                 </div>
                             </div>
@@ -98,10 +178,17 @@ export default function Auth() {
                                         id="password"
                                         type="password"
                                         placeholder="Create a password"
+                                        value={signUp.password}
+                                        onChange={(e) =>
+                                            setSignUp(prev => ({
+                                                ...prev,
+                                                password: e.target.value
+                                            }))
+                                        }
                                     />
                                 </div>
                             </div>
-                            <Button className="w-full font-bold">Create Account</Button>
+                            <Button onClick={(e) => handleSignUp(e)} className="w-full font-bold cursor-pointer">Create Account</Button>
                         </TabsContent>
                     </Tabs>
                 </CardContent>
