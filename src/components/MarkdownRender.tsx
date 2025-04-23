@@ -7,38 +7,38 @@ interface MarkdownRendererProps {
 }
 
 const markdownComponents: Components = {
-    h1: ({ node, ...props }) => (
+    h1: ({ ...props }) => (
         <h1 style={{ fontSize: "2.25rem", fontWeight: "bold", color: "#000" }} {...props} />
     ),
-    h2: ({ node, ...props }) => (
+    h2: ({ ...props }) => (
         <h2 style={{ fontSize: "1.875rem", fontWeight: "bold", color: "#000" }} {...props} />
     ),
-    h3: ({ node, ...props }) => (
+    h3: ({ ...props }) => (
         <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#000" }} {...props} />
     ),
-    h4: ({ node, ...props }) => (
+    h4: ({ ...props }) => (
         <h4 style={{ fontSize: "1.25rem", fontWeight: "bold", color: "#000" }} {...props} />
     ),
-    h5: ({ node, ...props }) => (
+    h5: ({ ...props }) => (
         <h5 style={{ fontSize: "1rem", fontWeight: "bold", color: "#000" }} {...props} />
     ),
-    h6: ({ node, ...props }) => (
+    h6: ({ ...props }) => (
         <h6 style={{ fontSize: "0.875rem", fontWeight: "bold", color: "#000" }} {...props} />
     ),
 
-    p: ({ node, ...props }) => (
+    p: ({ ...props }) => (
         <p style={{ fontSize: "1rem", color: "#4B5563", lineHeight: 1.6 }} {...props} />
     ),
 
-    strong: ({ node, ...props }) => (
+    strong: ({ ...props }) => (
         <strong style={{ color: "#000", fontWeight: "bold" }} {...props} />
     ),
 
-    em: ({ node, ...props }) => (
+    em: ({ ...props }) => (
         <em style={{ color: "#6B7280", fontStyle: "italic" }} {...props} />
     ),
 
-    blockquote: ({ node, ...props }) => (
+    blockquote: ({ ...props }) => (
         <blockquote
             style={{
                 borderLeft: "4px solid #D1D5DB",
@@ -51,21 +51,21 @@ const markdownComponents: Components = {
         />
     ),
 
-    ul: ({ node, ...props }) => (
+    ul: ({ ...props }) => (
         <ul style={{ color: "#4B5563", paddingLeft: "1.25rem", margin: "1rem 0" }} {...props} />
     ),
 
-    ol: ({ node, ...props }) => (
+    ol: ({ ...props }) => (
         <ol style={{ color: "#4B5563", paddingLeft: "1.25rem", margin: "1rem 0" }} {...props} />
     ),
 
-    li: ({ node, ...props }) => <li style={{ marginBottom: "0.5rem" }} {...props} />,
+    li: ({ ...props }) => <li style={{ marginBottom: "0.5rem" }} {...props} />,
 
-    hr: ({ node, ...props }) => (
+    hr: ({ ...props }) => (
         <hr style={{ borderColor: "#D1D5DB", margin: "2rem 0" }} {...props} />
     ),
 
-    a: ({ node, ...props }) => (
+    a: ({ ...props }) => (
         <a
             style={{ color: "#2563EB", textDecoration: "underline" }}
             {...props}
@@ -74,11 +74,7 @@ const markdownComponents: Components = {
         />
     ),
 
-    img: ({ node, ...props }) => (
-        <img style={{ maxWidth: "100%", margin: "1rem 0" }} alt={props.alt} {...props} />
-    ),
-
-    table: ({ node, ...props }) => (
+    table: ({ ...props }) => (
         <table
             style={{
                 width: "100%",
@@ -90,7 +86,7 @@ const markdownComponents: Components = {
         />
     ),
 
-    th: ({ node, ...props }) => (
+    th: ({ ...props }) => (
         <th
             style={{
                 border: "1px solid #D1D5DB",
@@ -103,7 +99,7 @@ const markdownComponents: Components = {
         />
     ),
 
-    td: ({ node, ...props }) => (
+    td: ({ ...props }) => (
         <td
             style={{
                 border: "1px solid #D1D5DB",

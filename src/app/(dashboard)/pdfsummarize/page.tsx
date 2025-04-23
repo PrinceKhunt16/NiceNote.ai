@@ -46,10 +46,10 @@ export default function PDFSummarize() {
   const [editTitle, setEditTitle] = useState("");
   const [editFileName, setEditFileName] = useState("");
   const [editTags, setEditTags] = useState("");
-  const { data: notes, isLoading, isError } = useUserNotes();
-  const { mutate, isPending: isPendingCreateSummary, isSuccess: isSuccessCreateSummary } = useCreateSummary();
-  const { mutate: editSummary, isPending: isPendingEditSummary, isSuccess: isSuccessEditSummary } = useEditSummary();
-  const { mutate: deleteSummary, isPending: isPendingDeleteSummary, isSuccess: isSuccessDeleteSummary } = useDeleteSummary();
+  const { data: notes } = useUserNotes();
+  const { mutate, isSuccess: isSuccessCreateSummary } = useCreateSummary();
+  const { mutate: editSummary, isSuccess: isSuccessEditSummary } = useEditSummary();
+  const { mutate: deleteSummary, isSuccess: isSuccessDeleteSummary } = useDeleteSummary();
 
   const extractText = () => {
     if (!file) return;

@@ -25,45 +25,13 @@ interface DashboardLayoutProps {
   children: ReactNode;
 }
 
-const useCases = [
-  {
-    title: "Upload PDF & Summarize",
-    description: "Summarize your pdf discussions and get superb notes.",
-    icon: "📥",
-    color: "bg-blue-100",
-    launch: true,
-  },
-  {
-    title: "Take Notes from Text",
-    description: "Convert your lengthy paragraph text to easy notes.",
-    icon: "📄",
-    color: "bg-green-100",
-    launch: false,
-  },
-  {
-    title: "YouTube Video Notes",
-    description: "Hours or Miniutes long youtube video in just few bullets.",
-    icon: "📺",
-    color: "bg-purple-100",
-    launch: false,
-  },
-  {
-    title: "Web Article Notes",
-    description:
-      "Long long articles, finds you hard to read. No worry click me.",
-    icon: "✍️",
-    color: "bg-orange-100",
-    launch: false,
-  },
-];
-
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const sidebarWidth = isSidebarOpen ? "w-64" : "w-18";
   const router = useRouter();
 
   const handleLogOut = async () => {
-    const data = await signOut()
+    await signOut()
     toasterMessage("Logged Out", "👋");
     router.push('/')
   }

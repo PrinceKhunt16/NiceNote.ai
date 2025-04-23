@@ -60,7 +60,3 @@ export function getSession() {
 export function getUser() {
   return supabase.auth.getUser();
 }
-
-export function onAuthStateChange(callback: any) {
-  return supabase.auth.onAuthStateChange(callback);
-}

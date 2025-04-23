@@ -1,12 +1,13 @@
 "use client";
 
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function VerifyInfo() {
+function VerifyInfoContent() {
     const searchParams = useSearchParams();
     const email = searchParams.get("email");
 
@@ -22,12 +23,12 @@ export default function VerifyInfo() {
                 <CardContent className="space-y-6">
                     <div className="text-center space-y-2">
                         <p className="text-gray-600">
-                            We've sent a verification link to{" "}
+                            We have sent a verification link to{" "}
                             <span className="font-semibold text-gray-900">{email}</span>. 
                             Please check your inbox and click the link to verify your email address.
                         </p>
                         <p className="text-sm text-gray-500">
-                            If you don't see the email, check your spam folder.
+                            If you do not see the email, check your spam folder.
                         </p>
                     </div>
 
@@ -42,5 +43,13 @@ export default function VerifyInfo() {
                 </CardContent>
             </Card>
         </div>
+    );
+}
+
+export default function VerifyInfoClient() {
+    return (
+        <Suspense fallback={<div className="text-center text-xl p-4">Loading...</div>}>
+            <VerifyInfoContent />
+        </Suspense>
     );
 }
