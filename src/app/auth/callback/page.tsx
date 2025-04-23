@@ -9,13 +9,10 @@ export default function Callback() {
   const supabase = createClient();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const redirectTo = params.get('redirectTo') || '/dashboard';
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event) => {
         if (event === 'SIGNED_IN') {
-          router.push(redirectTo);
+          router.push('/dashboard');
         }
       }
     );

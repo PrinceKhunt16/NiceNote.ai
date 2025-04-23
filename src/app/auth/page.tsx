@@ -16,8 +16,6 @@ export default function Auth() {
     const [signUp, setSignUp] = useState({ name: "", email: "", password: "" });
     const [, setError] = useState('');
     const router = useRouter();
-    const params = new URLSearchParams(window.location.search);
-    const redirectTo = params.get('redirectTo') || '/dashboard';
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,7 +37,7 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${location.origin}/auth/callback?redirectTo=${encodeURIComponent(redirectTo)}`,
+                redirectTo: `${location.origin}/auth/callback?redirectTo=${encodeURIComponent("/dashboard")}`,
                 queryParams: {
                     access_type: 'offline',
                     prompt: 'consent',
