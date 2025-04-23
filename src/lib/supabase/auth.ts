@@ -5,6 +5,8 @@ export async function signUpAuth(
   email: string,
   password: string
 ) {
+  const authCallbackURL = `${process.env.NEXT_PUBLIC_APP_URI}/auth/callback`
+        
   const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
@@ -12,7 +14,7 @@ export async function signUpAuth(
       data: {
         name: name,
       },
-      emailRedirectTo: `${window.location.origin}/auth/callback`,
+      emailRedirectTo: authCallbackURL,
     },
   });
   return { data, error };
@@ -44,10 +46,12 @@ export async function signOut() {
 }
 
 export async function signInWithProvider(provider: "google") {
+  const authCallbackURL = `${process.env.NEXT_PUBLIC_APP_URI}/auth/callback`
+        
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: `${location.origin}/auth/callback`,
+      redirectTo: authCallbackURL,
     },
   });
   return { data, error };

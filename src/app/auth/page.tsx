@@ -34,10 +34,12 @@ export default function Auth() {
     };
 
     const handleSignInGoogle = async () => {
+        const authCallbackURL = `${process.env.NEXT_PUBLIC_APP_URI}/auth/callback`
+        
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${location.origin}/auth/callback?redirectTo=${encodeURIComponent("/dashboard")}`,
+                redirectTo: authCallbackURL,
                 queryParams: {
                     access_type: 'offline',
                     prompt: 'consent',
