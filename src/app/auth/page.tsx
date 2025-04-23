@@ -14,28 +14,34 @@ import { toasterMessage } from "@/lib/toaster";
 export default function Auth() {
     const [signIn, setSignIn] = useState({ email: "", password: "" });
     const [signUp, setSignUp] = useState({ name: "", email: "", password: "" });
-    const [, setError] = useState('');
     const router = useRouter();
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         const { error } = await signInAuth(signIn.email, signIn.password);
+
         if (error?.code === 'unverified_email') {
             router.push(`/verify-info?email=${encodeURIComponent(signIn.email)}`);
             return;
         }
+
         if (error) {
             toasterMessage(error.message, "🥲");
-            setError(error.message);
         } else {
-            toasterMessage("Welcome to NiceNote.ai", "🔥");
-            router.push('/dashboard');
+            const { data: { session } } = await supabase.auth.getSession();
+
+            if (session) {
+                toasterMessage("Welcome to NiceNote.ai", "🔥");
+                router.push('/dashboard');
+            } else {
+                toasterMessage("Session not found", "🥲");
+            }
         }
     };
 
     const handleSignInGoogle = async () => {
         const authCallbackURL = `${process.env.NEXT_PUBLIC_APP_URI}/auth/callback`
-        
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
@@ -49,20 +55,28 @@ export default function Auth() {
 
         if (error) {
             toasterMessage(error.message, "🥲");
-            console.error('Google OAuth error:', error);
         }
 
-        toasterMessage("Welcome to NiceNote.ai", "🔥");
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            toasterMessage("Welcome to NiceNote.ai", "🔥");
+            router.push('/dashboard');
+        } else {
+            toasterMessage("Session not found", "🥲");
+        }
     };
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
+
         const { data, error } = await signUpAuth(signUp.name, signUp.email, signUp.password);
+
         if (error) {
             toasterMessage(error.message, "🥲");
-            setError(error.message);
             return;
         }
+
         if (data.user) {
             router.push(`/verify-info?email=${encodeURIComponent(signUp.email)}`);
         }
