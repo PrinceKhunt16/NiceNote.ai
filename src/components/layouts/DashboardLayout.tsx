@@ -156,7 +156,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {isSidebarOpen && (
           <div className="p-4">
             <div className="bg-blue-50 p-4 rounded-lg mb-4">
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-blue-800 font-bold">
                 Upgrade now to Summarize more files and get access to priority
                 support!
               </p>

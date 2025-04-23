@@ -114,7 +114,7 @@ export default function PDFSummarize() {
         <h1 className="text-3xl font-bold">PDF Summaries</h1>
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline" className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white hover:text-white p-5">
+            <Button variant="outline" className="bg-blue-600 hover:bg-blue-700 font-bold cursor-pointer text-white hover:text-white p-5">
               <span>+</span>
               New Summary
             </Button>
@@ -172,7 +172,7 @@ export default function PDFSummarize() {
             <Search className="absolute left-3 top-[10px] h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search summaries..."
-              className="pl-9"
+              className="pl-9 bg-white shadow" 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -225,7 +225,7 @@ export default function PDFSummarize() {
                   <div className="absolute right-0 top-0 order-1 z-10">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" aria-label="Options" className="border-2 w-10 h-10 bg-gray cursor-pointer rounded-full bg-white">
+                        <Button variant="ghost" size="sm" aria-label="Options" className="border-2 w-10 h-10 bg-gray cursor-pointer font-bold rounded-full bg-white">
                           <EllipsisVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>

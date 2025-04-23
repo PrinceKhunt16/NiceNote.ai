@@ -49,6 +49,10 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/auth", request.url));
     }
 
+    if (session && (path.startsWith("/auth"))) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
     return response;
 }
 

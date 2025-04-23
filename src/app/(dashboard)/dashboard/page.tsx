@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 py-16">
-      <div className="max-w-3xl mx-auto text-center mb-14">
+      <div className="max-w-3xl mx-auto text-center mb-16">
         <h1 className="text-3xl md:text-4xl font-bold mb-4">
           Get detailed notes in seconds.
         </h1>
@@ -52,11 +52,11 @@ export default function Dashboard() {
           👋🏻 Hey, What do you want to note down today?
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
           {useCases.map((useCase, index) => (
-            <Link href={`${useCase.link}`} passHref key={index}>
+            <Link href={`${useCase.launch ? useCase.link : "#"}`} passHref key={index}>
               <div
-                className={`p-6 rounded-3xl ${useCase.color} ${useCase.launch ? 'hover:shadow-lg transition-shadow cursor-pointer' : 'opacity-70 cursor-not-allowed'
+                className={`p-6 rounded-2xl ${useCase.color} ${useCase.launch ? 'hover:shadow-lg transition-shadow cursor-pointer' : 'opacity-70 cursor-not-allowed'
                   } relative`}
               >
                 {!useCase.launch && (
@@ -78,11 +78,16 @@ export default function Dashboard() {
           ))}
         </div>
 
-        <footer className="text-center text-gray-500 text-sm py-4">
+        <footer className="text-center text-gray-500 text-md py-4 font-bold">
           Build with 💙 by{' '}
-          <span className="font-medium text-blue-600 cursor-pointer hover:text-blue-800 transition-colors">
+          <a
+            href="https://www.linkedin.com/in/prince-khunt-linked-in/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-blue-600 cursor-pointer hover:text-blue-800 transition-colors"
+          >
             Prince Khunt
-          </span>
+          </a>
         </footer>
       </div>
     </div>
