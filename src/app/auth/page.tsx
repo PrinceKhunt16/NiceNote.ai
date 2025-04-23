@@ -13,13 +13,13 @@ import { toasterMessage } from "@/lib/toaster";
 
 export default function Auth() {
     const [signIn, setSignIn] = useState({
-        email: "princekhunt04@gmail.com",
-        password: "prince10"
+        email: "",
+        password: ""
     })
     const [signUp, setSignUp] = useState({
-        name: "Prince Khunt",
-        email: "princekhunt04@gmail.com",
-        password: "prince10"
+        name: "",
+        email: "",
+        password: ""
     })
     const [error, setError] = useState('')
     const router = useRouter()
