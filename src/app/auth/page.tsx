@@ -33,9 +33,7 @@ export default function Auth() {
             if (session) {
                 toasterMessage("Welcome to NiceNote.ai", "🔥");
                 router.push('/dashboard');
-            } else {
-                toasterMessage("Session not found", "🥲");
-            }
+            } 
         }
     };
 
@@ -62,9 +60,7 @@ export default function Auth() {
         if (session) {
             toasterMessage("Welcome to NiceNote.ai", "🔥");
             router.push('/dashboard');
-        } else {
-            toasterMessage("Session not found", "🥲");
-        }
+        } 
     };
 
     const handleSignUp = async (e: React.FormEvent) => {
