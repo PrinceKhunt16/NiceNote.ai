@@ -27,6 +27,7 @@ export default function Auth() {
             return;
         }
         if (error) {
+            toasterMessage(error.message, "🥲");
             setError(error.message);
         } else {
             toasterMessage("Welcome to NiceNote.ai", "🔥");
@@ -47,6 +48,7 @@ export default function Auth() {
         });
 
         if (error) {
+            toasterMessage(error.message, "🥲");
             console.error('Google OAuth error:', error);
         }
 
@@ -57,6 +59,7 @@ export default function Auth() {
         e.preventDefault();
         const { data, error } = await signUpAuth(signUp.name, signUp.email, signUp.password);
         if (error) {
+            toasterMessage(error.message, "🥲");
             setError(error.message);
             return;
         }
