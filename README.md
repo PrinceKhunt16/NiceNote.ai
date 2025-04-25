@@ -25,7 +25,7 @@ AI Notes App is a full-stack web application built using Next.js, Supabase, Reac
 
 ## 📁 Project Structure
 
-![Project Structure](previews/ss1.png)
+![Project Structure](previews/ss7.png)
 
 ---
 
@@ -66,12 +66,12 @@ npm run dev
 
 ## Previews
 
+![screenshot 1](previews/ss1.png)
 ![screenshot 2](previews/ss2.png)
 ![screenshot 3](previews/ss3.png)
 ![screenshot 4](previews/ss4.png)
 ![screenshot 5](previews/ss5.png)
 ![screenshot 6](previews/ss6.png)
-![screenshot 7](previews/ss7.png)
 
 --- 
 

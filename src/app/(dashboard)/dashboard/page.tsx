@@ -1,3 +1,6 @@
+"use client"
+
+import { toasterMessage } from "@/lib/toaster";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -16,7 +19,7 @@ export default function Dashboard() {
       icon: "📄",
       color: "bg-green-100",
       launch: false,
-      link: 'notesfromtext'
+      link: '#'
     },
     {
       title: "YouTube Video Notes",
@@ -24,7 +27,7 @@ export default function Dashboard() {
       icon: "📺",
       color: "bg-purple-100",
       launch: false,
-      link: "youtubenotes"
+      link: "#"
     },
     {
       title: "Web Article Notes",
@@ -32,13 +35,19 @@ export default function Dashboard() {
       icon: "✍️",
       color: "bg-orange-100",
       launch: false,
-      link: "articlenotes"
+      link: "#"
     }
   ];
 
+  const checkIsUnderDevelopment = (title: string) => {
+    if (title !== "Upload PDF & Summarize") {
+      toasterMessage("This feature is under development!", "🚀")
+    }
+  }
+
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-3xl mx-auto text-center mb-16">
+    <div className="container mx-auto px-4">
+      <div className="max-w-3xl mx-auto text-center mt-18 mb-16">
         <h1 className="text-3xl md:text-4xl font-bold mb-4">
           Get detailed notes in seconds.
         </h1>
@@ -48,22 +57,22 @@ export default function Dashboard() {
       </div>
 
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-2xl font-semibold mb-10 text-center">
+        <h2 className="text-2xl font-semibold mb-12 text-center">
           👋🏻 Hey, What do you want to note down today?
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
           {useCases.map((useCase, index) => (
-            <Link href={`${useCase.launch ? useCase.link : "#"}`} passHref key={index}>
+            <Link href={`${useCase.launch ? useCase.link : "#"}`} passHref key={index} onClick={() => checkIsUnderDevelopment(useCase.title)}>
               <div
-                className={`p-6 rounded-2xl ${useCase.color} ${useCase.launch ? 'hover:shadow-lg transition-shadow cursor-pointer' : 'opacity-70 cursor-not-allowed'
+                className={`p-6 rounded-2xl ${useCase.color} ${useCase.launch ? 'hover:shadow-lg transition-shadow cursor-pointer' : 'opacity-70'
                   } relative`}
               >
-                {!useCase.launch && (
+                {/* {!useCase.launch && (
                   <div className="absolute top-2 right-2 text-yellow-600 px-2 py-1 text-xs font-black">
                     Premium
                   </div>
-                )}
+                )} */}
                 <div className="flex items-start space-x-4">
                   <div className="flex items-center justify-center min-w-12 min-h-12 rounded-full bg-white">
                     {useCase.icon}
@@ -79,7 +88,7 @@ export default function Dashboard() {
         </div>
 
         <footer className="text-center text-gray-500 text-md py-4 font-bold">
-          Build with 💙 by{' '}
+          Build with 💙 | {' '}
           <a
             href="https://www.linkedin.com/in/prince-khunt-linked-in/"
             target="_blank"
@@ -88,6 +97,9 @@ export default function Dashboard() {
           >
             Prince Khunt
           </a>
+          {" "}
+          | {" "}
+          Feedbacks are welcome. You can DM me on linkedin.
         </footer>
       </div>
     </div>

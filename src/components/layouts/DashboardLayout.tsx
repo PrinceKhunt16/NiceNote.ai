@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Sparkles,
   LogOut,
   ChevronsLeft,
   ChevronsRight,
@@ -110,7 +109,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {isSidebarOpen ? (
                 <>
                   <span>📄</span>
-                  <span className="ml-2">PDF & Summarize</span>
+                  <span className={`ml-2 ${isActivePDFSummarize ? "text-blue-600" : "text-black"}`}>PDF & Summarize</span>
                 </>
               ) : (
                 "📄"
@@ -118,11 +117,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </Link>
 
-          <Link href="/#" className="w-full pointer-events-none">
+          <Link href="#" className="w-full" onClick={() => toasterMessage("This feature is under development!", "🚀")}>
             <Button
               variant="ghost"
               disabled
-              className={`cursor-not-allowed flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
+              className={`flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
                   ? "w-full h-[44px] items-center justify-start px-4"
                   : "w-10 h-10 items-center justify-center"
                 }`}
@@ -138,11 +137,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </Link>
 
-          <Link href="/#" className="w-full pointer-events-none">
+          <Link href="#" className="w-full" onClick={() => toasterMessage("This feature is under development!", "🚀")}>
             <Button
               variant="ghost"
               disabled
-              className={`cursor-not-allowed flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
+              className={`flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
                   ? "w-full h-[44px] items-center justify-start px-4"
                   : "w-10 h-10 items-center justify-center"
                 }`}
@@ -158,11 +157,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </Link>
 
-          <Link href="/#" className="w-full pointer-events-none">
+          <Link href="#" className="w-full" onClick={() => toasterMessage("This feature is under development!", "🚀")}>
             <Button
               variant="ghost"
               disabled
-              className={`cursor-not-allowed flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
+              className={`flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
                   ? "w-full h-[44px] items-center justify-start px-4"
                   : "w-10 h-10 items-center justify-center"
                 }`}
@@ -179,8 +178,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </Link>
         </div>
 
-        <div className="flex-grow"></div>
-        {isSidebarOpen && (
+        {/* <div className="flex-grow"></div> */}
+        {/* {isSidebarOpen && (
           <div className="p-4">
             <div className="bg-blue-50 p-4 rounded-lg mb-4">
               <p className="text-sm text-blue-800 font-bold">
@@ -192,7 +191,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Sparkles className="h-4 w-4 mr-2" />Premium Plans
             </Button>
           </div>
-        )}
+        )} */}
       </div>
 
       <main
