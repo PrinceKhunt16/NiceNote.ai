@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Plus,
   Sparkles,
   LogOut,
   ChevronsLeft,
@@ -18,7 +17,7 @@ import {
 import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { signOut } from "@/lib/supabase/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { toasterMessage } from "@/lib/toaster";
 
 interface DashboardLayoutProps {
@@ -29,6 +28,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const sidebarWidth = isSidebarOpen ? "w-64" : "w-18";
   const router = useRouter();
+  const pathname = usePathname()
+  const isActivePDFSummarize = pathname === "/pdfsummarize";
 
   const handleLogOut = async () => {
     await signOut()
@@ -38,7 +39,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarOpen(window.innerWidth >= 768);
+      setIsSidebarOpen(window.innerWidth >= 950);
     };
 
     handleResize();
@@ -84,40 +85,98 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         className={`fixed top-0 left-0 ${sidebarWidth} mt-16 h-[calc(100vh-4rem)] bg-gray-50 flex flex-col border-r transition-width duration-300`}
       >
         <div
-          className={`${isSidebarOpen ? "p-4" : "p-4"} ${isSidebarOpen ? "gap-4" : "gap-4"
-            } ${isSidebarOpen
-              ? "flex items-center justify-between"
-              : "flex flex-col-reverse items-center"
-            }`}
+          className={`flex flex-col items-end gap-2 p-4`}
         >
-          {isSidebarOpen ? (
-            <Link
-              href="/pdfsummarize"
-              className={`flex items-center cursor-pointer flex-grow font-bold border-2 h-[44px] hover:bg-blue-50 rounded-lg bg-white`}
-            >
-              <Button variant="ghost" className="w-full justify-start cursor-pointer font-bold">
-                <Plus className="w-4 mr-2" /> Generate New
-              </Button>
-            </Link>
-          ) : (
-            <Link
-              href="/pdfsummarize"
-              className={`flex items-center cursor-pointer w-10 h-10 border-2 rounded-md bg-white hover:bg-blue-50`}
-            >
-              <Button variant="ghost" className="w-full justify-center cursor-pointer">
-                <Plus className="h-4 w-4" fontWeight={400} />
-              </Button>
-            </Link>
-          )}
           <Button
             variant="ghost"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
-            className={`border-2 cursor-pointer bg-white ${isSidebarOpen ? "w-11 p-5" : "w-10 h-10"
-              }`}
+            className={`border-2 bg-white cursor-pointer ${isSidebarOpen ? "w-11 p-5" : "w-10 h-10"}`}
           >
             {isSidebarOpen ? <ChevronsLeft /> : <ChevronsRight />}
           </Button>
+
+          <Link
+            href="/pdfsummarize"
+            className="w-full cursor-pointer"
+          >
+            <Button
+             className={`cursor-pointer flex border-2 text-black bg-white hover:bg-blue-50 font-bold rounded-lg transition-all ${
+              isSidebarOpen
+                ? "w-full h-[44px] items-center justify-start px-4"
+                : "w-10 h-10 items-center justify-center"
+            } ${isActivePDFSummarize ? "border-blue-200" : "border-gray-300"}`} 
+            >
+              {isSidebarOpen ? (
+                <>
+                  <span>📄</span>
+                  <span className="ml-2">PDF & Summarize</span>
+                </>
+              ) : (
+                "📄"
+              )}
+            </Button>
+          </Link>
+
+          <Link href="/#" className="w-full pointer-events-none">
+            <Button
+              variant="ghost"
+              disabled
+              className={`cursor-not-allowed flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
+                  ? "w-full h-[44px] items-center justify-start px-4"
+                  : "w-10 h-10 items-center justify-center"
+                }`}
+            >
+              {isSidebarOpen ? (
+                <>
+                  <span>📝</span>
+                  <span className="ml-2">Notes from Text</span>
+                </>
+              ) : (
+                "📝"
+              )}
+            </Button>
+          </Link>
+
+          <Link href="/#" className="w-full pointer-events-none">
+            <Button
+              variant="ghost"
+              disabled
+              className={`cursor-not-allowed flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
+                  ? "w-full h-[44px] items-center justify-start px-4"
+                  : "w-10 h-10 items-center justify-center"
+                }`}
+            >
+              {isSidebarOpen ? (
+                <>
+                  <span>👨🏻‍💻</span>
+                  <span className="ml-2">YT Video Notes</span>
+                </>
+              ) : (
+                "👨🏻‍💻"
+              )}
+            </Button>
+          </Link>
+
+          <Link href="/#" className="w-full pointer-events-none">
+            <Button
+              variant="ghost"
+              disabled
+              className={`cursor-not-allowed flex border-2 bg-white text-yellow-600 border-yellow-200 font-bold rounded-lg transition-all ${isSidebarOpen
+                  ? "w-full h-[44px] items-center justify-start px-4"
+                  : "w-10 h-10 items-center justify-center"
+                }`}
+            >
+              {isSidebarOpen ? (
+                <>
+                  <span>🌐</span>
+                  <span className="ml-2">Web Article Notes</span>
+                </>
+              ) : (
+                "🌐"
+              )}
+            </Button>
+          </Link>
         </div>
 
         <div className="flex-grow"></div>
@@ -125,12 +184,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="p-4">
             <div className="bg-blue-50 p-4 rounded-lg mb-4">
               <p className="text-sm text-blue-800 font-bold">
-                Upgrade now to Summarize more files and get access to priority
+                Premium Plans for Summarize more files and get access to priority
                 support!
               </p>
             </div>
-            <Button className={`w-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center cursor-pointer flex-grow font-bold p-5`}>
-              <Sparkles className="h-4 w-4 mr-2" /> Upgrade Now
+            <Button className={`w-full bg-blue-600 hover:bg-blue-700 text-yellow-400 flex items-center justify-center cursor-pointer flex-grow font-bold p-5`}>
+              <Sparkles className="h-4 w-4 mr-2" />Premium Plans
             </Button>
           </div>
         )}

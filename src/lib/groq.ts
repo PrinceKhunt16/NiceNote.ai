@@ -18,7 +18,7 @@ export const generateSummaryWithGroq = async (pdfText: string): Promise<string> 
           },
           {
             role: "user",
-            content: `Summarize the following content in Markdown format with a clear title, don't add summary or note word in title, bullet points, and bold key points (max 300 words):\n\n${pdfText.substring(0, 10000)}`
+            content: `Summarize the following content in Markdown format with a clear title, Avoid using the words 'summary' or 'notes' in the title, bullet points, and bold key points (max 300 words):\n\n${pdfText.substring(0, 10000)}`
           }
         ],
         temperature: 0.5
